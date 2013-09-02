@@ -1,29 +1,21 @@
 package cn.devit.jdt.spelling;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.text.spelling.DefaultSpellingEngine;
-import org.eclipse.jdt.internal.ui.text.spelling.JavaSpellingEngine;
-import org.eclipse.jdt.internal.ui.text.spelling.PropertiesFileSpellingEngine;
-import org.eclipse.jdt.internal.ui.text.spelling.TextSpellingEngine;
-import org.eclipse.jdt.ui.text.IJavaPartitions;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITypedRegion;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.ui.texteditor.spelling.ISpellingEngine;
 import org.eclipse.ui.texteditor.spelling.ISpellingProblemCollector;
 import org.eclipse.ui.texteditor.spelling.SpellingContext;
 
+@SuppressWarnings({ "restriction" })
 public class Engine1 extends DefaultSpellingEngine implements ISpellingEngine {
 
     /** Java source content type */
+    @SuppressWarnings("unused")
     private static final IContentType JAVA_CONTENT_TYPE = Platform
             .getContentTypeManager().getContentType(
                     JavaCore.JAVA_SOURCE_CONTENT_TYPE);
@@ -35,9 +27,9 @@ public class Engine1 extends DefaultSpellingEngine implements ISpellingEngine {
         javaSpellingEngine = new NameSpellingChecker();
 
     }
-    
-    void abc(){
-        
+
+    void abc() {
+
     }
 
     @Override

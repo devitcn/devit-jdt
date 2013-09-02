@@ -18,6 +18,7 @@ import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.ui.texteditor.spelling.ISpellingProblemCollector;
 import org.eclipse.ui.texteditor.spelling.SpellingContext;
 
+@SuppressWarnings("restriction")
 public class NameSpellingChecker extends JavaSpellingEngine {
 
     private boolean checkClassMethodFieldName = true;
@@ -162,7 +163,7 @@ public class NameSpellingChecker extends JavaSpellingEngine {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.jdt.internal.ui.text.spelling.SpellingEngine#check(org.eclipse
      * .jface.text.IDocument, org.eclipse.jface.text.IRegion[],

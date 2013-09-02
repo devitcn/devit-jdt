@@ -2,6 +2,7 @@ package cn.devit.jdt.spelling;
 
 import org.eclipse.jdt.internal.ui.text.spelling.engine.ISpellCheckIterator;
 
+@SuppressWarnings("restriction")
 public class CamelCaseWordsIterator implements ISpellCheckIterator {
 
     @Override
@@ -19,7 +20,7 @@ public class CamelCaseWordsIterator implements ISpellCheckIterator {
     @Override
     public void remove() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -43,7 +44,7 @@ public class CamelCaseWordsIterator implements ISpellCheckIterator {
     @Override
     public void setIgnoreSingleLetters(boolean state) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }
