@@ -1,7 +1,6 @@
 package cn.devit.jdt.spelling;
 
 import java.text.BreakIterator;
-import java.util.Locale;
 
 import org.junit.Test;
 
@@ -25,7 +24,7 @@ public class RuleBasedBreakIteratorTest {
         CommonWordIterator iterator = new CommonWordIterator(true);
         iterator.setText(stringToExamine);
         start = iterator.first();
-        for (int end = iterator.next(); end != iterator.DONE; start = end, end = iterator
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator
                 .next()) {
             System.out.println(stringToExamine.substring(start, end));
         }
