@@ -29,7 +29,7 @@ public class NameSpellingChecker extends JavaSpellingEngine {
             .compile("(?:class|interface|enum)\\s+(\\w+)");
 
     Pattern methodSignaturePattern = Pattern
-            .compile("(?:public|protected|private|static|\\s+)*\\s+[\\w<>\\s,\\?]+\\s+(\\w+)\\((?:[^)]*)\\)");
+            .compile("\\s*(?:public|protected|private)?(?:\\s+static)?\\s+(?:<[\\w<>\\s,\\?]+?>\\s+)?(?:\\w[\\w<>,\\?]+>?)\\s+((?:\\$|\\w)+)\\((?:[^)(]*)(\\))[^}]+");
 
     Pattern variableDeclarationPattern = Pattern
             .compile("(?:(?:public|private|static|final)\\s)*\\s?[\\w<>\\s,\\?]+\\s+(\\w+)\\s*(?:=|;)");
@@ -118,7 +118,7 @@ public class NameSpellingChecker extends JavaSpellingEngine {
                             int offset = item.getOffset() + matcher.start(1);
                             // from first group to end of string. will check
                             // method name and every parameter name.
-                            int length = matcher.end() - matcher.start(1);
+                            int length = matcher.end(2) - matcher.start(1);
                             Region declaration = new Region(offset, length);
                             System.out.println("check method signature:"
                                     + document.get(declaration.getOffset(),

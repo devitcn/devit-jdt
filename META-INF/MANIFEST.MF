@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: java development tools extend
 Bundle-SymbolicName: cn.devit.jdt;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: cn.devit.jdt.Activator
 Bundle-Vendor: Devit.cn
 Require-Bundle: org.eclipse.ui,
