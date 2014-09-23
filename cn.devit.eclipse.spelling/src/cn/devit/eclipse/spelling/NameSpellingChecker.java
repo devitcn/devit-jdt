@@ -1,4 +1,4 @@
-package cn.devit.jdt.spelling;
+package cn.devit.eclipse.spelling;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension
+         point="org.eclipse.ui.workbench.texteditor.spellingEngine">
+      <engine
+            class="cn.devit.eclipse.spelling.Engine1"
+            default="true"
+            id="cn.devit.eclipse.spelling.engine1"
+            label="%defaultSpellingEnginePatch.label"
+            preferencesClass="cn.devit.eclipse.spelling.ExtendSpellingPreferenceBlock">
+      </engine>
+   </extension>
+</fragment>

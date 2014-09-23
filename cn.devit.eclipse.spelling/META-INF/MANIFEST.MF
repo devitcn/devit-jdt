@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Localization: cn.devit.eclipse.spelling
+Bundle-SymbolicName: cn.devit.eclipse.spelling;singleton:=true
+Bundle-Name: %name
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: lxbzmy@gmail.com
+Fragment-Host: org.eclipse.jdt.ui;bundle-version="3.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

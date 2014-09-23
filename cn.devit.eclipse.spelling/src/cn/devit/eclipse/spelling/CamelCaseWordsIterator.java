@@ -1,4 +1,4 @@
-package cn.devit.jdt.spelling;
+package cn.devit.eclipse.spelling;
 
 import org.eclipse.jdt.internal.ui.text.spelling.engine.ISpellCheckIterator;
 

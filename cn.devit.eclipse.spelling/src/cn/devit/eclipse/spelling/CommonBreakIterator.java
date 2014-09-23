@@ -1,4 +1,4 @@
-package cn.devit.jdt.spelling;
+package cn.devit.eclipse.spelling;
 
 import java.text.CharacterIterator;
 
