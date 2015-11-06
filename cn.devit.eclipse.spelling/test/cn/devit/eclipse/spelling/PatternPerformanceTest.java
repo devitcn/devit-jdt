@@ -15,7 +15,7 @@ public class PatternPerformanceTest {
             .compile("\\s*(?:public|protected|private)?(?:\\s+static)?\\s+(?:<[\\w<>\\s,\\?]+?>\\s+)?(?:\\w[\\w<>,\\?]+>?)\\s+((?:\\$|\\w)+)\\((?:[^)(]*)(\\))[^}]+");
 
     @Test(timeout = 1000)
-    public void test() throws IOException {
+    public void should_finish_in_seconds() throws IOException {
         File file = new File(
                 "src/cn/devit/jdt/spelling/NameSpellingChecker.java");
         FileInputStream is = new FileInputStream(file);
