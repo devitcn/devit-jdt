@@ -7,11 +7,18 @@ patch org.eclipse.jdt to support some feature needed by everybody.
 
 feature
 -----------
-1. Extend default spelling engine to support java package name,class name,method name,variable name spell check.
-
+1. Patch default spelling engine to support check java package ,class ,method ,variable declaration and also support camel case.
 ![spelling support camel case](doc/spelling.png "camel case spelling check.")
 
-Different form IDEA word check, the plugin only check **only** check variable declare segment for minimum developer's attention.
+We check:
+- package declaration(last segment)
+- class, method,parameter name
+- any variable
+
+**Note:** We only check declaration part in order to minimum developer's attention.
+We ignore:
+
+- method with `@Override`
 
 **note** Sine spelling checker can not get AST of java file. I have to use three regular expression pattern to match package,class name,method name and variable. So there maybe some performance problem if file is large.
 

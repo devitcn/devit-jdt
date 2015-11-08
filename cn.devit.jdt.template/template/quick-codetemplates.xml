@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+/*******************************************************************************
+ * Copyright (c) 2014 lxbzmy@gmail.com
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     lxb<lxbzmy@gmail.com>
+ *******************************************************************************/
+-->
+
+<templates>
+  <!-- new map ,new set ,new list -->
+  <template autoinsert="true" context="java" deleted="false"
+    description="new array list" enabled="true" name="newlist"
+    ><![CDATA[${imp:import(java.util.ArrayList,java.util.List)}
+List<${T}> ${V} = new ArrayList<${T}>(${10});]]></template>
+
+  <template autoinsert="true" context="java" deleted="false"
+    description="new hash map" enabled="true" name="newmap"
+    ><![CDATA[${imp:import(java.util.Map,java.util.HashMap)}
+Map<${K},${V}> ${map} = new HashMap<${K}, ${V}>(${10});]]></template>
+
+  <template autoinsert="true" context="java" deleted="false"
+    description="new hash set" enabled="true" name="newset"
+    ><![CDATA[${imp:import(java.util.Set,java.util.HashSet)}
+Set<${K}> ${set} = new HashSet<${K}>(${10});]]></template>
+
+  <template autoinsert="false" context="java" deleted="false"
+    description="close formater" enabled="true"
+    id="devit.format_off" name="@formatter:off"><![CDATA[@formatter:off]]></template>
+
+  <!-- logger and test-->
+  <template autoinsert="true" context="java" deleted="false"
+    description="create private logger for class" enabled="true" name="logger"
+    ><![CDATA[${imp:import(org.slf4j.Logger,org.slf4j.LoggerFactory)}
+static final Logger logger = LoggerFactory.getLogger(${enclosing_type}.class);]]></template>
+
+  <template autoinsert="false" context="java-members" deleted="false"
+    description="test method (JUnit 4)" enabled="true"
+    id="org.eclipse.jdt.ui.templates.test_junit4" name="test"><![CDATA[@${testType:newType(org.junit.Test)}
+public void ${testName}() throws Exception {
+    ${staticImport:importStatic('org.junit.Assert.*','org.hamcrest.Matchers.*')}${cursor}
+}]]></template>
+
+
+</templates>
