@@ -30,6 +30,11 @@ Map<${K},${V}> ${map} = new HashMap<${K}, ${V}>(${10});]]></template>
     ><![CDATA[${imp:import(java.util.Set,java.util.HashSet)}
 Set<${K}> ${set} = new HashSet<${K}>(${10});]]></template>
 
+  <template autoinsert="true" context="java" deleted="false"
+    description="new string builder " enabled="true" name="newsb"
+    ><![CDATA[${imp:import(java.lang.StringBuilder)}
+StringBuilder ${sb} = new StringBuilder(${});]]></template>
+
   <template autoinsert="false" context="java" deleted="false"
     description="close formater" enabled="true"
     id="devit.format_off" name="@formatter:off"><![CDATA[@formatter:off]]></template>
