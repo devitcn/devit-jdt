@@ -8,7 +8,7 @@ import org.eclipse.jface.text.Region;
  * @author lxb
  *
  */
-public class AClassHasWronWords implements AInterfacContainsWrongWords {
+public class AClassHasWronWords implements AInterfacContainsWrongWords,Runnable {
 
     /**
      * should be wrong words.
@@ -49,5 +49,11 @@ public class AClassHasWronWords implements AInterfacContainsWrongWords {
     @Override
     public void wrongWorda() {
     }
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

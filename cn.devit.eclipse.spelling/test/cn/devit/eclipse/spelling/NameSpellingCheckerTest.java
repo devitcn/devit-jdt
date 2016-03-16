@@ -29,4 +29,17 @@ public class NameSpellingCheckerTest {
         }
         assertThat(count, is(5));
     }
+
+    @Test
+    public void match_type_name() throws Exception {
+        //@formatter:off
+        String sample = "class A extends foo implements foo,bar{\n"
+                + ""
+                + "}";
+        //@formatter:on
+        Matcher matcher = NameSpellingChecker.classNamePattern
+                .matcher(sample);
+        assertThat(matcher.find(),is(true));
+        assertThat(matcher.group(1),is("A"));
+    }
 }

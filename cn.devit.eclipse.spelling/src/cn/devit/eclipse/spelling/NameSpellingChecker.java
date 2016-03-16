@@ -27,7 +27,7 @@ public class NameSpellingChecker extends JavaSpellingEngine {
             "package (?:[\\p{L}\\p{N}]+\\s*\\.\\s*)*([\\p{L}\\p{N}]+)\\s*;");
 
     static Pattern classNamePattern = Pattern
-            .compile("(?:class|interface|enum)\\s+(\\w+)");
+            .compile("(?:class|interface|enum)\\s+(\\w+)[^{]*\\{");
 
     /**
      * A magic pattern to match method name.
@@ -37,6 +37,7 @@ public class NameSpellingChecker extends JavaSpellingEngine {
 
     /**
      * A magic pattern to match variable name,method parameter name.
+     * It doesn't exactly math then variable but quick and simple.
      */
     static Pattern variableDeclarationPattern = Pattern
             .compile("(?:\\w|>)+\\s+(\\w+)\\s*(?:\\)|,|=|;)");
@@ -68,11 +69,11 @@ public class NameSpellingChecker extends JavaSpellingEngine {
                 for (ITypedRegion item : partitions) {
                     if (monitor != null && monitor.isCanceled())
                         return;
-                    // a pointer record end position of region scanned.
+                    // a pointer record end position of region scanned.use this point to avoid duplicated regular match.
                     int pointer = item.getOffset();
                     int remain = item.getLength();
-                    System.out.println(item.getType() + ":"
-                            + document.get(item.getOffset(), item.getLength()));
+//                    System.out.println(item.getType() + ":"
+//                            + document.get(item.getOffset(), item.getLength()));
                     if (checkClassMethodFieldName && (item.getType()
                             .equals(IJavaPartitions.JAVA_PARTITIONING)
                             || item.getType()
@@ -81,7 +82,7 @@ public class NameSpellingChecker extends JavaSpellingEngine {
                         Matcher matcher;
 
                         // There is only one package declaration at file
-                        // beginning.
+                        // beginning,so use firstJavaRegion var boolean switcher.
                         if (firstJavaRegion) {
                             // Only check package name that last segment.
                             matcher = packageNamePattern
@@ -91,8 +92,8 @@ public class NameSpellingChecker extends JavaSpellingEngine {
                                         + matcher.start(1);
                                 int length = matcher.end(1) - matcher.start(1);
 
-                                pointer = item.getOffset() + length;
-                                remain = remain - length;
+                                pointer = item.getOffset() + matcher.end();
+                                remain = remain - matcher.end();
 
                                 Region declaration = new Region(offset, length);
                                 checker.execute(listener,
@@ -108,19 +109,22 @@ public class NameSpellingChecker extends JavaSpellingEngine {
                         // Only check class name declaration.
                         matcher = classNamePattern
                                 .matcher(document.get(pointer, remain));
+                        int p1 = pointer;
                         while (matcher.find()) {
-                            int offset = pointer + matcher.start(1);
+                            int offset = p1 + matcher.start(1);
                             int length = matcher.end(1) - matcher.start(1);
                             Region declaration = new Region(offset, length);
 
-                            // System.out.println("check class declaration:"
-                            // + document.get(declaration.getOffset(),
-                            // declaration.getLength()));
+                            //move pointer forward. TODO this MAY be missing block between main and nested class declaration if no any comment.
+                            pointer = pointer +matcher.end();
+                            remain = remain - matcher.end();
+                             System.out.println("check class declaration:"
+                             + document.get(declaration.getOffset(),
+                             declaration.getLength()));
                             checker.execute(listener,
                                     new SpellCheckIterator(document,
                                             declaration, checker.getLocale(),
                                             new JavaBreakIterator()));
-
                         }
                         // continue;
 
@@ -131,10 +135,11 @@ public class NameSpellingChecker extends JavaSpellingEngine {
                         int p = pointer;
                         while (matcher.find()) {
                             int offset = pointer + matcher.start(1);
+                            //skip new class block.
                             if(matcher.group(0).startsWith("new")){
                                 continue;
                             }
-                            //if @Override before method name.
+                            //if @Override before method name, skip it.
                             if (document.get(p, matcher.start())
                                     .contains("@Override")) {
                                 p = p + matcher.end();
