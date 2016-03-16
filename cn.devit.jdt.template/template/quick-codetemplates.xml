@@ -14,7 +14,7 @@
 -->
 
 <templates>
-  <!-- new map ,new set ,new list -->
+  <!-- new map ,new set ,new list,new string builder,buffer -->
   <template autoinsert="true" context="java" deleted="false"
     description="new array list" enabled="true" name="newlist"
     ><![CDATA[${imp:import(java.util.ArrayList,java.util.List)}
@@ -32,12 +32,16 @@ Set<${K}> ${set} = new HashSet<${K}>(${10});]]></template>
 
   <template autoinsert="true" context="java" deleted="false"
     description="new string builder " enabled="true" name="newsb"
-    ><![CDATA[${imp:import(java.lang.StringBuilder)}
-StringBuilder ${sb} = new StringBuilder(${});]]></template>
+    ><![CDATA[${imp:import(java.lang.StringBuffer)}
+StringBuffer ${sb} = new StringBuffer(${});]]></template>
 
+  <!-- comment to switch formatter -->
   <template autoinsert="false" context="java" deleted="false"
     description="close formater" enabled="true"
     id="devit.format_off" name="@formatter:off"><![CDATA[@formatter:off]]></template>
+  <template autoinsert="false" context="java" deleted="false"
+    description="close formater" enabled="true"
+    id="devit.format_on" name="@formatter:on"><![CDATA[@formatter:on]]></template>
 
   <!-- logger and test-->
   <template autoinsert="true" context="java" deleted="false"
