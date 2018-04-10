@@ -41,8 +41,14 @@ type `newlist` and hit content assistant key (alt+/ or ctrl+space) and select `n
     //test
     //create @Test method,and automatic import org.junit.Assert.* ,org.hamcrest.Matchers
 
+Install
+---------
 
-planing
+- In "Install New Software" dialog, paste update site url: http://devitcn.github.io/devit-jdt/
+- Install plugins and restart
+- Open Preferences, spelling,change spelling engine to "Default spelling engine path"
+
+Further Planing
 ----------
 
 1. code assist to generate map to bean access. for example map.put("props" bean.getProps);
@@ -52,23 +58,25 @@ planing
 5. some code template.
 6. file link: jump link in service test jsp js and properties. click link on jsp or js jump to controller or js file support expression evaluate.
 
- WorkbenchActionBuilder
- <menu
-               commandId="org.eclipse.ui.navigate.showInQuickMenu"
-               id="org.eclipse.ui.ide.markers.showInMenu"
-               label="%menu.showIn.label"
-               mnemonic="%menu.showIn.mnemonic">
-            <dynamic
-                  class="org.eclipse.ui.ExtensionFactory:showInContribution"
-                  id="org.eclipse.ui.menus.dynamicShowInMenu">
-            </dynamic>
-         </menu>
+     WorkbenchActionBuilder
+     <menu
+                   commandId="org.eclipse.ui.navigate.showInQuickMenu"
+                   id="org.eclipse.ui.ide.markers.showInMenu"
+                   label="%menu.showIn.label"
+                   mnemonic="%menu.showIn.mnemonic">
+                <dynamic
+                      class="org.eclipse.ui.ExtensionFactory:showInContribution"
+                      id="org.eclipse.ui.menus.dynamicShowInMenu">
+                </dynamic>
+             </menu>
 
-7.
-copy comment from filed,or sync edit comment on getter setter field.
+7. copy comment from filed,or sync edit comment on getter setter field.
+
 org.eclipse.jdt.ui.CodeGeneration.getSetterComment(ICompilationUnit, String, String, String, String, String, String, String)
 AddGetterSetterAction
+
 8. run/debug last launched
+
 License
 ---------------
 
