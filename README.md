@@ -5,7 +5,7 @@ patch org.eclipse.jdt to support some feature needed by everybody.
 
 对org.eclipse.jdt做一些寻常开发中用到的补丁。
 
-feature
+Features
 -----------
 1. Patch default spelling engine to support check java package ,class ,method ,variable declaration and also support camel case.
 ![spelling support camel case](doc/spelling.png "camel case spelling check.")
@@ -42,7 +42,7 @@ type `newlist` and hit content assistant key (alt+/ or ctrl+space) and select `n
     //create @Test method,and automatic import org.junit.Assert.* ,org.hamcrest.Matchers
 
 
-planing
+Plans
 ----------
 
 1. code assist to generate map to bean access. for example map.put("props" bean.getProps);
@@ -64,11 +64,11 @@ planing
             </dynamic>
          </menu>
 
-7.
-copy comment from filed,or sync edit comment on getter setter field.
+7. copy comment from filed,or sync edit comment on getter setter field.
 org.eclipse.jdt.ui.CodeGeneration.getSetterComment(ICompilationUnit, String, String, String, String, String, String, String)
 AddGetterSetterAction
 8. run/debug last launched
+
 License
 ---------------
 
