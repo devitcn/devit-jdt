@@ -5,7 +5,7 @@ patch org.eclipse.jdt to support some feature needed by everybody.
 
 对org.eclipse.jdt做一些寻常开发中用到的补丁。
 
-feature
+Features
 -----------
 1. Patch default spelling engine to support check java package ,class ,method ,variable declaration and also support camel case.
 ![spelling support camel case](doc/spelling.png "camel case spelling check.")
@@ -44,12 +44,12 @@ type `newlist` and hit content assistant key (alt+/ or ctrl+space) and select `n
 Install
 ---------
 
-- In "Install New Software" dialog, paste update site url: http://devitcn.github.io/devit-jdt/
+- In "Install New Software" dialog, paste update site url: http://devitcn.github.io/devit-jdt/ 
 - Install plugins and restart
 - Open Preferences, spelling,change spelling engine to "Default spelling engine path"
 
-Further Planing
-----------
+Plans
+---------
 
 1. code assist to generate map to bean access. for example map.put("props" bean.getProps);
 2. code complete sorter to access method unique in a block of code.
@@ -57,24 +57,7 @@ Further Planing
 4. export java bean into jsdt for quick edit.
 5. some code template.
 6. file link: jump link in service test jsp js and properties. click link on jsp or js jump to controller or js file support expression evaluate.
-
-     WorkbenchActionBuilder
-     <menu
-                   commandId="org.eclipse.ui.navigate.showInQuickMenu"
-                   id="org.eclipse.ui.ide.markers.showInMenu"
-                   label="%menu.showIn.label"
-                   mnemonic="%menu.showIn.mnemonic">
-                <dynamic
-                      class="org.eclipse.ui.ExtensionFactory:showInContribution"
-                      id="org.eclipse.ui.menus.dynamicShowInMenu">
-                </dynamic>
-             </menu>
-
 7. copy comment from filed,or sync edit comment on getter setter field.
-
-org.eclipse.jdt.ui.CodeGeneration.getSetterComment(ICompilationUnit, String, String, String, String, String, String, String)
-AddGetterSetterAction
-
 8. run/debug last launched
 
 License
