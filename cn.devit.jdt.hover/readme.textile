@@ -1,0 +1,87 @@
+h1. hover
+
+p(lead). More gentle way to show java doc.
+
+h2. example
+
+you generate a pojo class.
+
+You MAY ONLY write some javadoc on private field because this is a boring work.
+
+you reference pojo object method.
+
+you cannot see any java doc outside the pojo class.until write javadoc on getter or setter(you need write javadoc three times).
+
+with this plugin you can see pojo field java doc .
+
+h2. use case
+
+如果方法调用对象是一个pojo（@Entity，或者名字叫dto，vo，或者没有spring的@Service 注解）
+如果调用了get 或者set，
+如果没有写文档
+那么就从字段上取文档，
+如果字段上没有写文档就找 单行，双行注释
+
+如果一个方法返回值是boolean，方法只有10行，那么可以直接在窗口中显示布尔表达式
+
+
+h2. 开发注记
+
+原本，直接使用fragment就可以的，但是hover是一个数组，排序不可控，pref 上也没有一个调整顺序的功能。
+只有使用plugin才可以保证出现在内置hover的前头。
+
+hover 的初始化位置在
+
+bc. org.eclipse.jdt.internal.ui.JavaPlugin.getJavaEditorTextHoverDescriptors()
+
+调用hover的位置在：
+
+bc. org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo(ITextViewer, IRegion)
+
+preference page:
+
+org.eclipse.jdt.internal.ui.preferences.JavaEditorHoverConfigurationBlock.getContributedHovers()
+
+plugins to check map key to bean property copy are equal.
+
+bc. <extension
+         point="org.eclipse.jdt.ui.javaEditorTextHovers">
+      <hover
+            label="%sequentialHover"
+            description="%sequentialHoverDescription"
+            class="org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover"
+            id="org.eclipse.jdt.ui.BestMatchHover">
+      </hover>
+      <hover
+            label="%problemHover"
+            description="%problemHoverDescription"
+            class="org.eclipse.jdt.internal.ui.text.java.hover.ProblemHover"
+            id="org.eclipse.jdt.ui.ProblemHover">
+      </hover>
+      <hover
+            label="%nlsStringHover"
+            description="%nlsStringHoverDescription"
+            class="org.eclipse.jdt.internal.ui.text.java.hover.NLSStringHover"
+            id="org.eclipse.jdt.ui.NLSStringHover">
+      </hover>
+      <hover
+            label="%javadocHover"
+            description="%javadocHoverDescription"
+            class="org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover"
+            id="org.eclipse.jdt.ui.JavadocHover">
+      </hover>
+      <hover
+            label="%annotationHover"
+            description="%annotationHoverDescription"
+            class="org.eclipse.jdt.internal.ui.text.java.hover.AnnotationHover"
+            id="org.eclipse.jdt.ui.AnnotationHover">
+      </hover>
+      <hover
+            label="%sourceHover"
+            description="%sourceHoverDescription"
+            class="org.eclipse.jdt.internal.ui.text.java.hover.JavaSourceHover"
+            id="org.eclipse.jdt.ui.JavaSourceHover">
+      </hover>
+   </extension>
+   
+   

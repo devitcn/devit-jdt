@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+     <extension
+           point="org.eclipse.jdt.ui.javaEditorTextHovers">
+        <hover
+              activate="true"
+              class="cn.devit.jdt.hover.JavadocHover"
+              description="%javadocHoverDescription"
+              id="cn.devit.jdt.JavadocHover"
+              label="%javadocHover">
+        </hover>
+     </extension>
+</plugin>
