@@ -1,11 +1,13 @@
 package cn.devit.jdt.hover;
 
+import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.text.java.hover.JavadocBrowserInformationControlInput;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -42,7 +44,7 @@ public class JavadocHover
             if (member instanceof IMethod) {
                 try {
                     if (((IMethod) member).getJavadocRange() != null) {
-
+                        System.out.println("has doc skip.");
                     } else {
                         String name = member.getElementName();
                         boolean isGetter = name.startsWith("get") //$NON-NLS-1$
@@ -58,23 +60,22 @@ public class JavadocHover
                             IType type = ((IMember) member).getDeclaringType();
                             IField field = type.getField(propertyName);
                             elements = new IJavaElement[] { field };
-                            System.out.println("helllo. ");
-                            //                            
-                            //                            if(isGetter || isBooleanGetter) {
-                            //                                String seterMethod = "set"+name.substring(isBooleanGetter ? 2 : 3);
-                            //                                //find setter javadoc
-                            //                                IMethod method= type.getMethod(seterMethod, new String[0]); //$NON-NLS-1$
-                            //                            }
-
+                            //TODO 出不来字段上的注解，字段的注解是从第二个参数取的。
+//                            JavadocBrowserInformationControlInput e = getHoverInfo(elements, getEditorInputJavaElement(), hoverRegion,
+//                                    null);
+                            //if the type is JPA entity class
+                            IAnnotation annotation = field.getDeclaringType().getAnnotation("entity");
+                            JavadocBrowserInformationControlInput e = getHoverInfo(elements, field.getTypeRoot(), hoverRegion,
+                                    null);
+                            return e;
                         }
                     }
                 } catch (JavaModelException e) {
+                    //I don't care
                 }
             }
         }
-
-        return getHoverInfo(elements, getEditorInputJavaElement(), hoverRegion,
-                null);
+        return null;
     }
 
     public static String firstToLower(String propertyName) {
