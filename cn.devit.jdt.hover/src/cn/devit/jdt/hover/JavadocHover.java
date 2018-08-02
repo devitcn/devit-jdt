@@ -37,7 +37,7 @@ public class JavadocHover
             return null;
 
         /*
-         * 寻找合适的显示
+         * 如果get set方法没有javadoc
          */
         if (elements.length == 1) {
             IJavaElement member = elements[0];
@@ -59,11 +59,18 @@ public class JavadocHover
                                     name.substring(isBooleanGetter ? 2 : 3));
                             IType type = ((IMember) member).getDeclaringType();
                             IField field = type.getField(propertyName);
+                            
+                            //如果有field
+                            //并且field字段有javadoc
+                            if(field==null || field.getJavadocRange()==null) {
+                                return null;
+                            }
                             elements = new IJavaElement[] { field };
-                            //TODO 出不来字段上的注解，字段的注解是从第二个参数取的。
+                            
 //                            JavadocBrowserInformationControlInput e = getHoverInfo(elements, getEditorInputJavaElement(), hoverRegion,
 //                                    null);
                             //if the type is JPA entity class
+                            //则显示field 字段的文档
                             IAnnotation annotation = field.getDeclaringType().getAnnotation("entity");
                             JavadocBrowserInformationControlInput e = getHoverInfo(elements, field.getTypeRoot(), hoverRegion,
                                     null);
