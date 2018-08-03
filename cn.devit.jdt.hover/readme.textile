@@ -1,8 +1,16 @@
-h1. hover
+h1. Hover
 
-p(lead). More gentle way to show java doc.
+p(lead). More gentle way to show java doc when hover on .
 
-h2. example
+h2. Features
+
+- 显示字段的注释，如果你比较懒（我就是-.-），没给get和set **复制** 注释，这将很有用，特别是JPA实体的时候
+- 显示枚举值的构造函数
+- 显示final字段的直接赋值
+- 如果get方法字段也没有注释，并且字段不java内建类型，则尝试显示返回值类型的注释
+
+
+h2. Example
 
 you generate a pojo class.
 
@@ -14,7 +22,7 @@ you cannot see any java doc outside the pojo class.until write javadoc on getter
 
 with this plugin you can see pojo field java doc .
 
-h2. use case
+h2. Use Case
 
 如果方法调用对象是一个pojo（@Entity，或者名字叫dto，vo，或者没有spring的@Service 注解）
 如果调用了get 或者set，
@@ -84,4 +92,61 @@ bc. <extension
       </hover>
    </extension>
    
+bc.. <html><head><style CHARSET="ISO-8859-1" TYPE="text/css">/* Font definitions */
+html         { font-family: '.SF NS Text',sans-serif; font-size: 13px; font-style: normal; font-weight: normal; }
+body, h1, h2, h3, h4, h5, h6, p, table, td, caption, th, ul, ol, dl, li, dd, dt { font-size: 1em; }
+pre          { font-family: monospace; }
+
+/* Margins */
+body       { overflow: auto; margin-top: 0px; margin-bottom: 0.5em; margin-left: 0.3em; margin-right: 0px; }
+h1           { margin-top: 0.3em; margin-bottom: 0.04em; }  
+h2           { margin-top: 2em; margin-bottom: 0.25em; }
+h3           { margin-top: 1.7em; margin-bottom: 0.25em; }
+h4           { margin-top: 2em; margin-bottom: 0.3em; }
+h5           { margin-top: 0px; margin-bottom: 0px; }
+p            { margin-top: 1em; margin-bottom: 1em; }
+pre          { margin-left: 0.6em; }
+ul           { margin-top: 0px; margin-bottom: 1em; margin-left: 1em; padding-left: 1em;}
+li           { margin-top: 0px; margin-bottom: 0px; } 
+li p       { margin-top: 0px; margin-bottom: 0px; } 
+ol           { margin-top: 0px; margin-bottom: 1em; margin-left: 1em; padding-left: 1em; }
+dl           { margin-top: 0px; margin-bottom: 1em; }
+dt           { margin-top: 0px; margin-bottom: 0px; font-weight: bold; }
+dd           { margin-top: 0px; margin-bottom: 0px; }
+
+/* Styles and colors */
+a:link       { color: #0000FF; }
+a:hover      { color: #000080; }
+a:visited    { text-decoration: underline; }
+a.header:link    { text-decoration: none; color: #000000 }
+a.header:visited { text-decoration: none; color: #000000 }
+a.header:hover   { text-decoration: underline; color: #000080; }
+h4           { font-style: italic; }
+strong       { font-weight: bold; }
+em           { font-style: italic; }
+var          { font-style: italic; }
+th           { font-weight: bold; }
+
+/* Workarounds for new Javadoc stylesheet (1.7) */ 
+ul.blockList li.blockList, ul.blockListLast li.blockList {
+    list-style:none;
+}
+ul.blockList ul.blockList ul.blockList ul.blockList li.blockListLast {
+    list-style:none;
+}
+</style>
+<base href='file:/Users/lxb/workspace1/jpa-demo/jpa-relation-demo/src/main/java/cn/devit/demo/Leaf.java'>
+</head><body text="#000000" bgcolor="#ecebec"><h5><div style='word-wrap: break-word; position: relative; margin-left: 20px; padding-top: 2px; '><a href='eclipse-open:%E2%98%82=jpa-relation-demo/src%5C/main%5C/java%3Ccn.devit.demo%7BLeaf.java%E2%98%83Leaf%5Ebranch'><!--[if lte IE 6]><![if gte IE 5.5]>
+<span alt='Open Declaration' style="border:none; position: absolute; width: 16px; height: 16px; left: -21px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='file:/Users/lxb/runtime-all/.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/0.png')"></span>
+<![endif]><![endif]-->
+<!--[if !IE]>-->
+<img alt='Open Declaration' style='border:none; position: absolute; width: 16px; height: 16px; left: -21px; ' src='file:/Users/lxb/runtime-all/.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/0.png'/>
+<!--<![endif]-->
+<!--[if gte IE 7]>
+<img alt='Open Declaration' style='border:none; position: absolute; width: 16px; height: 16px; left: -21px; ' src='file:/Users/lxb/runtime-all/.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/0.png'/>
+<![endif]-->
+</a><a class='header' href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/src%5C/main%5C/java%3Ccn.devit.demo%7BLeaf.java%E2%98%83Leaf%5Ebranch%E2%98%82Branch'>Branch</a> <a class='header' href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/src%5C/main%5C/java%3Ccn'>cn</a>.<a class='header' href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/src%5C/main%5C/java%3Ccn.devit'>devit</a>.<a class='header' href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/src%5C/main%5C/java%3Ccn.devit.demo'>demo</a>.<a class='header' href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/src%5C/main%5C/java%3Ccn.devit.demo%7BLeaf.java%E2%98%83Leaf'>Leaf</a>.branch</div></h5><br>
+<div style='margin-bottom: 5px;'>@<a href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/%5C/Users%5C/lxb%5C/.m2%5C/repository%5C/org%5C/hibernate%5C/javax%5C/persistence%5C/hibernate-jpa-2.1-api%5C/1.0.0.Final%5C/hibernate-jpa-2.1-api-1.0.0.Final.jar%3Cjavax.persistence(ManyToOne.class%E2%98%83ManyToOne'>ManyToOne</a><br>
+@<a href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/%5C/Users%5C/lxb%5C/.m2%5C/repository%5C/org%5C/hibernate%5C/javax%5C/persistence%5C/hibernate-jpa-2.1-api%5C/1.0.0.Final%5C/hibernate-jpa-2.1-api-1.0.0.Final.jar%3Cjavax.persistence(JoinColumn.class%E2%98%83JoinColumn'>JoinColumn</a>(<a href='eclipse-javadoc:%E2%98%82=jpa-relation-demo/%5C/Users%5C/lxb%5C/.m2%5C/repository%5C/org%5C/hibernate%5C/javax%5C/persistence%5C/hibernate-jpa-2.1-api%5C/1.0.0.Final%5C/hibernate-jpa-2.1-api-1.0.0.Final.jar%3Cjavax.persistence(JoinColumn.class%E2%98%83JoinColumn~name'>name</a>="branch_id")<br></div><p>branch</body></html>
+
    
