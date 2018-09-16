@@ -1,14 +1,17 @@
 package cn.devit.jdt.hover;
 
-import org.eclipse.jdt.core.IAnnotation;
-import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMember;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
+import java.io.IOException;
+
+import org.eclipse.jdt.core.*;
+import org.eclipse.jdt.internal.core.manipulation.util.Strings;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
+import org.eclipse.jdt.internal.corext.util.MethodOverrideTester;
+import org.eclipse.jdt.internal.corext.util.SuperTypeHierarchyCache;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.text.JavaCodeReader;
 import org.eclipse.jdt.internal.ui.text.java.hover.JavadocBrowserInformationControlInput;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -33,6 +36,9 @@ public class JavadocHover
 
     @Override
     public Object getHoverInfo2(ITextViewer textViewer, IRegion hoverRegion) {
+        /**
+         * 返回的可以是字符串，也可以是JavadocBrowserInformationControlInput#getHtml();
+         */
         IJavaElement[] elements = getJavaElementsAt(textViewer, hoverRegion);
         if (elements == null || elements.length == 0)
             return null;
@@ -45,16 +51,33 @@ public class JavadocHover
             if (member instanceof IMethod) {
                 try {
                     if (((IMethod) member).getJavadocRange() != null) {
+                        
                     } else {
                         String name = member.getElementName();
+
+                        //如果覆盖了方法，上一层的方法上有注解，则显示他们
+                        if(canInheritJavadoc(member)) {
+                            //String content= JavadocContentAccess2.getHTMLContent(element, true);
+                            JavadocBrowserInformationControlInput html =  getHoverInfo(elements, getEditorInputJavaElement(), hoverRegion, null);
+                            String stringHtml  = html.getHtml();
+                            StringBuilder buffer= new StringBuilder();
+                            IMethod declaration = findMethodDeclaration(member);
+                            if(declaration!=null) {
+                                addAnnotations(buffer, declaration, declaration.getTypeRoot(), hoverRegion);
+                                stringHtml = stringHtml.replace("</body></html>", buffer.toString()+"</body></html>");
+                            }
+                            return new JavadocBrowserInformationControlInput((JavadocBrowserInformationControlInput) html.getPrevious(), member, stringHtml, 0);
+                        }
+                        
+                        //显示字段的注解
                         boolean isGetter = name.startsWith("get") //$NON-NLS-1$
                                 && name.length() > 3;
                         boolean isBooleanGetter = name.startsWith("is") //$NON-NLS-1$
                                 && name.length() > 2;
                         boolean isSetter = name.startsWith("set") //$NON-NLS-1$
                                 && name.length() > 3;
-
-                        if (isGetter || isBooleanGetter || isSetter) {
+                                
+                        if (isGetter || isBooleanGetter || isSetter && ((IMethod) member).getDeclaringType().isClass()) {
                             String propertyName = firstToLower(
                                     name.substring(isBooleanGetter ? 2 : 3));
                             IType type = ((IMember) member).getDeclaringType();
@@ -67,7 +90,7 @@ public class JavadocHover
                                  * 使用返回值类型的注释
                                  */
                                 if(isGetter) {
-                                    return useReturnTypeDoc(hoverRegion, member,
+                                    return useJavaDocFromReturnType(hoverRegion, member,
                                             type);
                                 }
                                 return null;
@@ -81,6 +104,10 @@ public class JavadocHover
                             IAnnotation annotation = field.getDeclaringType().getAnnotation("entity");
                             JavadocBrowserInformationControlInput e = getHoverInfo(elements, field.getTypeRoot(), hoverRegion,
                                     null);
+                            
+                            if(isSetter) {
+                                //TODO try to attach small uncommon setter source code.
+                            }
                             return e;
                         }
                     }
@@ -92,7 +119,33 @@ public class JavadocHover
         return null;
     }
 
-    Object useReturnTypeDoc(IRegion hoverRegion, IJavaElement member,
+    private IMethod findMethodDeclaration(IJavaElement member) throws JavaModelException {
+        IMethod method = (IMethod) member;
+        IType classType = method.getDeclaringType();
+        ITypeHierarchy fTypeHierarchy = SuperTypeHierarchyCache.getTypeHierarchy(classType);
+        final MethodOverrideTester tester= SuperTypeHierarchyCache.getMethodOverrideTester(classType);
+        //TODO 取巧了，只取得上一级的interface就够了。
+        IType[] allInterface = fTypeHierarchy.getAllSuperInterfaces(classType);
+        for (IType iType : allInterface) {
+            IMethod overridden= tester.findOverriddenMethodInType(iType, method);
+            if(overridden !=null) {
+                //gocha
+                return overridden;
+            }
+        }
+        return method;
+    }
+
+    /**
+     * Getter 没有注解的话，优先使用返回类型的注释。
+     * 
+     * @param hoverRegion
+     * @param member
+     * @param type
+     * @return
+     * @throws JavaModelException
+     */
+    Object useJavaDocFromReturnType(IRegion hoverRegion, IJavaElement member,
             IType type) throws JavaModelException {
         String returnTypeQName = ((IMethod) member).getReturnType();
         Signature.toString(returnTypeQName);
@@ -122,54 +175,89 @@ public class JavadocHover
         }
     }
 
+    /**
+     * TODO 如果set get 不简单，则显示源码。
+     * 
+     * @param member
+     * @return
+     */
+    String tryAttachUnCommonSetterSourceCode(IJavaElement member){
+        if ((member instanceof IMember || member instanceof ILocalVariable || member instanceof ITypeParameter) && member instanceof ISourceReference) {
+            try {
+                String source= ((ISourceReference) member).getSource();
+
+                String[] sourceLines= getTrimmedSource(source, member);
+                if (sourceLines == null)
+                    return null;
+
+                String delim= StubUtility.getLineDelimiterUsed(member);
+                source= Strings.concatenate(sourceLines, delim);
+
+                return source;
+            } catch (JavaModelException ex) {
+                //do nothing
+            }
+        }
+        return null;
+    }
+    
     public static String firstToLower(String propertyName) {
         char[] c = propertyName.toCharArray();
         c[0] = Character.toLowerCase(c[0]);
         return String.valueOf(c);
     }
-}
-/*
- * private static String resolveTypeSignature(IMethod method, String typeSignature) throws JavaModelException {
-        int count = Signature.getArrayCount(typeSignature);
-        String elementTypeSignature = Signature.getElementType(typeSignature);
-        if (elementTypeSignature.length() == 1) {
-            // no need to resolve primitive types
-            return typeSignature;
-        }
-        String elementTypeName = Signature.toString(elementTypeSignature);
-        IType type = method.getDeclaringType();
-        String[][] resolvedElementTypeNames = type.resolveType(elementTypeName);
-        if (resolvedElementTypeNames == null || resolvedElementTypeNames.length != 1) {
-            // check if type parameter
-            ITypeParameter typeParameter = method.getTypeParameter(elementTypeName);
-            if (!typeParameter.exists()) {
-                typeParameter = type.getTypeParameter(elementTypeName);
+    
+    /**
+     * COPY from  org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2.canInheritJavadoc(IMember)
+     */
+    private static boolean canInheritJavadoc(IJavaElement member) {
+        if (member instanceof IMethod && member.getJavaProject().exists()) {
+            /*
+             * Exists test catches ExternalJavaProject, in which case no hierarchy can be built.
+             */
+            try {
+                return ! ((IMethod) member).isConstructor();
+            } catch (JavaModelException e) {
+                JavaPlugin.log(e);
             }
-            if (typeParameter.exists()) {
-                String[] bounds = typeParameter.getBounds();
-                if (bounds.length == 0) {
-                    return "Ljava/lang/Object;"; //$NON-NLS-1$
-                }
-                String bound = Signature.createTypeSignature(bounds[0], false);
-                return Signature.createArraySignature(resolveTypeSignature(method, bound), count);
-            }
-            // the type name cannot be resolved
-            return null;
         }
-
-        String[] types = resolvedElementTypeNames[0];
-        types[1] = types[1].replace('.', '$');
-
-        String resolvedElementTypeName = Signature.toQualifiedName(types);
-        String resolvedElementTypeSignature = "";
-        if(types[0].equals("")) {
-            resolvedElementTypeName = resolvedElementTypeName.substring(1);
-            resolvedElementTypeSignature = Signature.createTypeSignature(resolvedElementTypeName, true);
-        }
-        else {
-            resolvedElementTypeSignature = Signature.createTypeSignature(resolvedElementTypeName, true).replace('.', '/');
-        }
-
-        return Signature.createArraySignature(resolvedElementTypeSignature, count);
+        return false;
     }
-*/
+    
+    private String[] getTrimmedSource(String source, IJavaElement javaElement) {
+        if (source == null)
+            return null;
+        source= removeLeadingComments(source);
+        String[] sourceLines= Strings.convertIntoLines(source);
+        Strings.trimIndentation(sourceLines, javaElement.getJavaProject());
+        return sourceLines;
+    }
+
+    private String removeLeadingComments(String source) {
+        final JavaCodeReader reader= new JavaCodeReader();
+        IDocument document= new Document(source);
+        int i;
+        try {
+            reader.configureForwardReader(document, 0, document.getLength(), true, false);
+            int c= reader.read();
+            while (c != -1 && (c == '\r' || c == '\n')) {
+                c= reader.read();
+            }
+            i= reader.getOffset();
+            reader.close();
+        } catch (IOException ex) {
+            i= 0;
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                JavaPlugin.log(ex);
+            }
+        }
+
+        if (i < 0)
+            return source;
+        return source.substring(i);
+    }
+
+}
