@@ -55,20 +55,6 @@ public class JavadocHover
                     } else {
                         String name = member.getElementName();
 
-                        //如果覆盖了方法，上一层的方法上有注解，则显示他们
-                        if(canInheritJavadoc(member)) {
-                            //String content= JavadocContentAccess2.getHTMLContent(element, true);
-                            JavadocBrowserInformationControlInput html =  getHoverInfo(elements, getEditorInputJavaElement(), hoverRegion, null);
-                            String stringHtml  = html.getHtml();
-                            StringBuilder buffer= new StringBuilder();
-                            IMethod declaration = findMethodDeclaration(member);
-                            if(declaration!=null) {
-                                addAnnotations(buffer, declaration, declaration.getTypeRoot(), hoverRegion);
-                                stringHtml = stringHtml.replace("</body></html>", buffer.toString()+"</body></html>");
-                            }
-                            return new JavadocBrowserInformationControlInput((JavadocBrowserInformationControlInput) html.getPrevious(), member, stringHtml, 0);
-                        }
-                        
                         if(((IMethod) member).isConstructor()) {
                             if(((IMethod) member).getDeclaringType().getJavadocRange()!=null) {
                                 Object e = getHoverInfo(new IJavaElement[]{((IMethod) member).getDeclaringType()}, 
@@ -111,7 +97,7 @@ public class JavadocHover
                             //if the type is JPA entity class
                             //则显示field 字段的文档
                             //IAnnotation annotation = field.getDeclaringType().getAnnotation("entity");
-                            JavadocBrowserInformationControlInput e = getHoverInfo(elements, field.getTypeRoot(), hoverRegion,
+                            Object e = getHoverInfo(elements, field.getTypeRoot(), hoverRegion,
                                     null);
                             
                             if(isSetter) {
@@ -119,6 +105,21 @@ public class JavadocHover
                             }
                             return e;
                         }
+                        
+                        //如果覆盖了方法，上一层的方法上有注解，则显示他们
+                        if(canInheritJavadoc(member)) {
+                            //String content= JavadocContentAccess2.getHTMLContent(element, true);
+                            JavadocBrowserInformationControlInput html =  getHoverInfo(elements, getEditorInputJavaElement(), hoverRegion, null);
+                            String stringHtml  = html.getHtml();
+                            StringBuilder buffer= new StringBuilder();
+                            IMethod declaration = findMethodDeclaration(member);
+                            if(declaration!=null) {
+                                addAnnotations(buffer, declaration, declaration.getTypeRoot(), hoverRegion);
+                                stringHtml = stringHtml.replace("</body></html>", buffer.toString()+"</body></html>");
+                            }
+                            return new JavadocBrowserInformationControlInput((JavadocBrowserInformationControlInput) html.getPrevious(), member, stringHtml, 0);
+                        }
+
                     }
                 } catch (JavaModelException e) {
                     //I don't care
