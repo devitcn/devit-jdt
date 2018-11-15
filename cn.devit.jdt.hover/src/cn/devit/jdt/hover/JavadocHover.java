@@ -69,6 +69,15 @@ public class JavadocHover
                             return new JavadocBrowserInformationControlInput((JavadocBrowserInformationControlInput) html.getPrevious(), member, stringHtml, 0);
                         }
                         
+                        if(((IMethod) member).isConstructor()) {
+                            if(((IMethod) member).getDeclaringType().getJavadocRange()!=null) {
+                                Object e = getHoverInfo(new IJavaElement[]{((IMethod) member).getDeclaringType()}, 
+                                        ((IMethod)member).getTypeRoot(), hoverRegion,
+                                        null);
+                                return e;
+                            }
+                        }
+                        
                         //显示字段的注解
                         boolean isGetter = name.startsWith("get") //$NON-NLS-1$
                                 && name.length() > 3;
@@ -101,7 +110,7 @@ public class JavadocHover
 //                                    null);
                             //if the type is JPA entity class
                             //则显示field 字段的文档
-                            IAnnotation annotation = field.getDeclaringType().getAnnotation("entity");
+                            //IAnnotation annotation = field.getDeclaringType().getAnnotation("entity");
                             JavadocBrowserInformationControlInput e = getHoverInfo(elements, field.getTypeRoot(), hoverRegion,
                                     null);
                             
